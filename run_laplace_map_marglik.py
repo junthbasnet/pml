@@ -237,14 +237,10 @@ if __name__ == '__main__':
             tags=tags
         )
     print(args)
-    method = args['method']
-    dataset = args['dataset']
-    logging.info(f'Method: {method} Dataset: {dataset}')
-    main(**args)
     
-    # for dataset in UCI_DATASETS:
-    #     args['dataset'] = dataset
-    #     method = args['method']
-    #     print(f'{dataset} Dataset')
-    #     logging.info(f'Method: {method} Dataset: {dataset}')
-    #     main(**args)
+    for dataset in UCI_DATASETS:
+        args['dataset'] = dataset
+        method = args['method']
+        print(f'{dataset} Dataset')
+        logging.info(f'Method: {method} Dataset: {dataset}')
+        main(**args)
