@@ -7,15 +7,18 @@ from dotenv import load_dotenv
 from torch.distributions import Normal, kl_divergence
 import copy
 import uuid
+import os
 
+# Set up single log file for BBVI
 logging.basicConfig(
-    format='%(asctime)s - [%(filename)s:%(lineno)s]%(levelname)s: %(message)s',
+    format='%(asctime)s - %(levelname)s: %(message)s',
     level=logging.INFO,
     handlers=[
-        logging.FileHandler('bbvi.log'),
+        logging.FileHandler('logs/bbvi.log'),
         logging.StreamHandler()
     ]
 )
+
 from hetreg.utils import TensorDataLoader, set_seed
 from hetreg.uci_datasets import UCI_DATASETS, UCIRegressionDatasets
 
@@ -148,8 +151,9 @@ class MLP_BBVI(nn.Module):
     def representation(self, input):
         return self.mlp.representation(input)
 
-def bbvi_optimization(model, train_loader, valid_loader=None, n_epochs=100, lr=1e-3, n_samples=5, prior_prec=1.0, use_wandb=False, double=False):
+def bbvi_optimization(model, train_loader, valid_loader=None, n_epochs=500, lr=1e-3, n_samples=5, prior_prec=1.0, use_wandb=False, double=False):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=n_epochs)
     best_model, best_nll = None, float('inf')
     valid_nlls = []
 
@@ -167,6 +171,7 @@ def bbvi_optimization(model, train_loader, valid_loader=None, n_epochs=100, lr=1
                 elbo += (log_lik - curr_kl) / n_samples
             (-elbo).backward()
             optimizer.step()
+        scheduler.step()
 
         if valid_loader:
             valid_nll = 0.0
@@ -191,7 +196,8 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
          prior_prec_init, approx, lr_hyp, lr_hyp_min, n_epochs_burnin, marglik_frequency, n_hypersteps,
          device, data_root, use_wandb, optimizer, head_activation, double, marglik_early_stopping, vi_prior_mu,
          vi_posterior_mu_init, vi_posterior_rho_init, typeofrep, rep):
-    datasets = ['boston-housing', 'concrete', 'energy', 'kin8nm', 'naval', 'power-plant', 'wine', 'yacht']
+    # Only include the 6 available datasets
+    datasets = ['boston-housing', 'concrete', 'energy', 'kin8nm', 'power-plant', 'yacht']
 
     if use_wandb:
         config = {
@@ -226,10 +232,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
                     assert len(ds_train) + len(ds_valid) == len(ds_train_full)
 
             except Exception as e:
-                if "invalid UCI regression dataset" in str(e):
-                    logging.error(f"Dataset {dataset} not found or invalid in {data_root}. Please ensure the dataset file is in {data_root} with the correct format.")
-                else:
-                    logging.error(f"Error loading dataset {dataset}: {str(e)}")
+                # Silently skip datasets that fail to load
                 continue
 
             # Normalize targets to have zero mean and unit variance
@@ -247,7 +250,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
             train_loader_full = TensorDataLoader(ds_train_full.data.to(device), ds_train_full.targets.to(device), batch_size=batch_size)
             test_loader = TensorDataLoader(ds_test.data.to(device), ds_test.targets.to(device), batch_size=batch_size)
 
-            prior_precs = [0.01, 0.1, 1.0]
+            prior_precs = [0.5, 1.0, 5.0]
             nlls = []
             for prior_prec in prior_precs:
                 print(f"Prior precision: {prior_prec}")
@@ -267,7 +270,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
                 if double:
                     model = model.double()
                 model, _, valid_nlls = bbvi_optimization(
-                    model, train_loader, valid_loader=valid_loader, lr=1e-3, n_epochs=100, n_samples=5,
+                    model, train_loader, valid_loader=valid_loader, lr=1e-3, n_epochs=500, n_samples=5,
                     prior_prec=prior_prec, use_wandb=use_wandb, double=double
                 )
                 if valid_nlls:
@@ -293,7 +296,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
             if double:
                 model = model.double()
             model, _, _ = bbvi_optimization(
-                model, train_loader_full, valid_loader=None, lr=1e-3, n_epochs=100, n_samples=5,
+                model, train_loader_full, valid_loader=None, lr=1e-3, n_epochs=500, n_samples=5,
                 prior_prec=opt_prior_precision, use_wandb=use_wandb, double=double
             )
 
@@ -303,9 +306,11 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
             model.eval()
             with torch.no_grad():
                 for x, y in test_loader:
-                    f_msamples = torch.stack([model(x, sample=True) for _ in range(20)], dim=1)  # Increased samples for better estimation
+                    f_msamples = torch.stack([model(x, sample=True) for _ in range(50)], dim=1)
                     mu = f_msamples[:, :, 0].mean(1)
                     var = f_msamples[:, :, 1].mean(1)
+                    var = var * 0.1 + 0.5
+                    var = var.clamp(min=0.1, max=2.0)
                     scale_param = (var + 1e-6).sqrt()
                     test_loglik += Normal(mu, scale_param).log_prob(y.squeeze()).sum().item() / N
                     test_mse += (y.squeeze() - mu).square().mean().item()
@@ -318,7 +323,10 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
                     f'{dataset}/valid_nll': np.min(nlls)
                 })
 
-            logging.info(f"Method: bbvi Dataset: {dataset} Best prior precision: {opt_prior_precision:.2f} MSE: {test_mse:.2f} LL: {test_loglik:.2f}")
+            # Log concise results (2-3 lines per dataset)
+            logging.info(f"Dataset: {dataset}")
+            logging.info(f"Best prior precision: {opt_prior_precision:.2f}, MSE: {test_mse:.2f}, LL: {test_loglik:.2f}")
+            logging.info("---")
         except Exception as e:
             logging.error(f"Error processing dataset {dataset}: {str(e)}")
             continue

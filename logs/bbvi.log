@@ -1,0 +1,18 @@
+2025-05-02 20:53:15,069 - INFO: Dataset: boston-housing
+2025-05-02 20:53:15,070 - INFO: Best prior precision: 1.00, MSE: 1.39, LL: -1.86
+2025-05-02 20:53:15,070 - INFO: ---
+2025-05-02 20:55:50,878 - INFO: Dataset: concrete
+2025-05-02 20:55:50,878 - INFO: Best prior precision: 1.00, MSE: 1.58, LL: -2.03
+2025-05-02 20:55:50,878 - INFO: ---
+2025-05-02 20:59:09,632 - INFO: Dataset: energy
+2025-05-02 20:59:09,632 - INFO: Best prior precision: 1.00, MSE: 1.60, LL: -2.04
+2025-05-02 20:59:09,632 - INFO: ---
+2025-05-02 21:02:06,765 - INFO: Dataset: kin8nm
+2025-05-02 21:02:06,765 - INFO: Best prior precision: 1.00, MSE: 1.43, LL: -1.89
+2025-05-02 21:02:06,765 - INFO: ---
+2025-05-02 21:04:45,050 - INFO: Dataset: power-plant
+2025-05-02 21:04:45,051 - INFO: Best prior precision: 1.00, MSE: 1.43, LL: -1.89
+2025-05-02 21:04:45,051 - INFO: ---
+2025-05-02 21:07:20,813 - INFO: Dataset: yacht
+2025-05-02 21:07:20,813 - INFO: Best prior precision: 1.00, MSE: 1.56, LL: -2.01
+2025-05-02 21:07:20,813 - INFO: ---

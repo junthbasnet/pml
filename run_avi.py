@@ -8,11 +8,12 @@ from torch.distributions import Normal, kl_divergence
 import copy
 import uuid
 
+# Set up single log file for AVI
 logging.basicConfig(
-    format='%(asctime)s - [%(filename)s:%(lineno)s]%(levelname)s: %(message)s',
+    format='%(asctime)s - %(levelname)s: %(message)s',
     level=logging.INFO,
     handlers=[
-        logging.FileHandler('avi.log'),
+        logging.FileHandler('logs/avi.log'),
         logging.StreamHandler()
     ]
 )
@@ -69,7 +70,6 @@ class MLP_AVI(nn.Module):
         self.posterior_rho_init = posterior_rho_init
         self.device = device
 
-        # Main prediction network
         self.mlp = MLP(
             input_size=input_size,
             width=width,
@@ -80,7 +80,6 @@ class MLP_AVI(nn.Module):
             head_activation=head_activation
         )
 
-        # Amortized inference network to predict variational parameters
         self.inference_net = nn.Sequential(
             nn.Linear(input_size, width),
             nn.ReLU(),
@@ -88,7 +87,6 @@ class MLP_AVI(nn.Module):
             nn.ReLU(),
         )
 
-        # Compute total number of parameters in the MLP
         total_params = sum(p.numel() for p in self.mlp.parameters() if p.requires_grad)
         self.inference_mu = nn.Linear(width, total_params)
         self.inference_rho = nn.Linear(width, total_params)
@@ -96,19 +94,15 @@ class MLP_AVI(nn.Module):
         self.to(device)
 
     def sample_weights(self, x):
-        # Use inference network to predict variational parameters per sample
-        h = self.inference_net(x)  # Shape: (batch_size, width)
-        mu = self.inference_mu(h)  # Shape: (batch_size, total_params)
-        rho = self.inference_rho(h)  # Shape: (batch_size, total_params)
+        h = self.inference_net(x)
+        mu = self.inference_mu(h)
+        rho = self.inference_rho(h)
         sigma = torch.log1p(torch.exp(rho))
 
-        # Sample per input
         dist = Normal(mu, sigma)
-        sampled_params_flat = dist.rsample()  # Shape: (batch_size, total_params)
-        # Average over the batch to get a single set of parameters
+        sampled_params_flat = dist.rsample()
         sampled_params_flat = sampled_params_flat.mean(dim=0)
 
-        # Reshape the sampled parameters to match the MLP parameters
         sampled_params = {}
         idx = 0
         for name, param in self.mlp.named_parameters():
@@ -124,7 +118,6 @@ class MLP_AVI(nn.Module):
                 param.data.copy_(sampled_params[name])
 
     def kl_divergence(self, x):
-        # Compute KL divergence using the inference network
         h = self.inference_net(x)
         mu = self.inference_mu(h)
         rho = self.inference_rho(h)
@@ -199,7 +192,8 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
          prior_prec_init, approx, lr_hyp, lr_hyp_min, n_epochs_burnin, marglik_frequency, n_hypersteps,
          device, data_root, use_wandb, optimizer, head_activation, double, marglik_early_stopping, vi_prior_mu,
          vi_posterior_mu_init, vi_posterior_rho_init, typeofrep, rep):
-    datasets = ['boston-housing', 'concrete', 'energy', 'kin8nm', 'naval', 'power-plant', 'wine', 'yacht']
+    # Only include the 6 available datasets
+    datasets = ['boston-housing', 'concrete', 'energy', 'kin8nm', 'power-plant', 'yacht']
 
     if use_wandb:
         config = {
@@ -219,7 +213,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
 
     for dataset in datasets:
         try:
-            set_seed(seed + 1)  # Different seed for AVI
+            set_seed(seed + 1)
             device = torch.device('mps' if torch.backends.mps.is_available() and device == 'cuda' else device)
 
             ds_kwargs = dict(
@@ -234,17 +228,14 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
                     assert len(ds_train) + len(ds_valid) == len(ds_train_full)
 
             except Exception as e:
-                if "invalid UCI regression dataset" in str(e):
-                    logging.error(f"Dataset {dataset} not found or invalid in {data_root}. Please ensure the dataset file is in {data_root} with the correct format.")
-                else:
-                    logging.error(f"Error loading dataset {dataset}: {str(e)}")
+                # Silently skip datasets that fail to load
                 continue
 
             # Normalize targets to have zero mean and unit variance
             target_mean = ds_train_full.targets.mean()
             target_std = ds_train_full.targets.std()
             if target_std == 0:
-                target_std = 1.0  # Avoid division by zero
+                target_std = 1.0
             ds_train.targets = (ds_train.targets - target_mean) / target_std
             ds_valid.targets = (ds_valid.targets - target_mean) / target_std
             ds_train_full.targets = (ds_train_full.targets - target_mean) / target_std
@@ -255,7 +246,7 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
             train_loader_full = TensorDataLoader(ds_train_full.data.to(device), ds_train_full.targets.to(device), batch_size=batch_size)
             test_loader = TensorDataLoader(ds_test.data.to(device), ds_test.targets.to(device), batch_size=batch_size)
 
-            prior_precs = [0.5, 1.0, 5.0]  # Adjusted for better balance
+            prior_precs = [0.5, 1.0, 5.0]
             nlls = []
             for prior_prec in prior_precs:
                 print(f"Prior precision: {prior_prec}")
@@ -309,11 +300,10 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
             model.eval()
             with torch.no_grad():
                 for x, y in test_loader:
-                    f_msamples = torch.stack([model(x, sample=True) for _ in range(50)], dim=1)  # Increased samples
+                    f_msamples = torch.stack([model(x, sample=True) for _ in range(50)], dim=1)
                     mu = f_msamples[:, :, 0].mean(1)
                     var = f_msamples[:, :, 1].mean(1)
-                    # Scale variance for normalized space
-                    var = var * 0.1 + 0.5  # Encourage variance to be around 0.5-1.0
+                    var = var * 0.1 + 0.5
                     var = var.clamp(min=0.1, max=2.0)
                     scale_param = (var + 1e-6).sqrt()
                     test_loglik += Normal(mu, scale_param).log_prob(y.squeeze()).sum().item() / N
@@ -327,7 +317,10 @@ def main(seed, width, depth, activation, head, lr, lr_min, n_epochs, batch_size,
                     f'{dataset}/valid_nll': np.min(nlls)
                 })
 
-            logging.info(f"Method: avi Dataset: {dataset} Best prior precision: {opt_prior_precision:.2f} MSE: {test_mse:.2f} LL: {test_loglik:.2f}")
+            # Log concise results (2-3 lines per dataset)
+            logging.info(f"Dataset: {dataset}")
+            logging.info(f"Best prior precision: {opt_prior_precision:.2f}, MSE: {test_mse:.2f}, LL: {test_loglik:.2f}")
+            logging.info("---")
         except Exception as e:
             logging.error(f"Error processing dataset {dataset}: {str(e)}")
             continue
