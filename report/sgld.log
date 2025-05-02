@@ -1,0 +1,48 @@
+2025-05-02 01:21:33,765 - [run_sgld.py:275]INFO: Method: sgld Dataset: boston-housing
+2025-05-02 01:21:33,783 - [run_sgld.py:57]INFO: Dataset: boston-housing
+2025-05-02 01:21:33,783 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:22:43,389 - [run_sgld.py:124]INFO: Best prior precision found via CV: 21.5443
+2025-05-02 01:22:43,389 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 21.5443
+2025-05-02 01:22:55,774 - [run_sgld.py:219]INFO: Final test performance: MSE=1.546, LogLik=-3.896
+2025-05-02 01:22:55,775 - [run_sgld.py:275]INFO: Method: sgld Dataset: concrete
+2025-05-02 01:22:55,783 - [run_sgld.py:57]INFO: Dataset: concrete
+2025-05-02 01:22:55,783 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:24:48,681 - [run_sgld.py:124]INFO: Best prior precision found via CV: 100.0000
+2025-05-02 01:24:48,681 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 100.0000
+2025-05-02 01:25:00,364 - [run_sgld.py:219]INFO: Final test performance: MSE=1.032, LogLik=-4.249
+2025-05-02 01:25:00,364 - [run_sgld.py:275]INFO: Method: sgld Dataset: energy
+2025-05-02 01:25:00,371 - [run_sgld.py:57]INFO: Dataset: energy
+2025-05-02 01:25:00,371 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:27:01,065 - [run_sgld.py:124]INFO: Best prior precision found via CV: 100.0000
+2025-05-02 01:27:01,065 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 100.0000
+2025-05-02 01:27:08,096 - [run_sgld.py:219]INFO: Final test performance: MSE=0.979, LogLik=-3.724
+2025-05-02 01:27:08,096 - [run_sgld.py:275]INFO: Method: sgld Dataset: kin8nm
+2025-05-02 01:27:08,122 - [run_sgld.py:57]INFO: Dataset: kin8nm
+2025-05-02 01:27:08,122 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:28:50,911 - [run_sgld.py:124]INFO: Best prior precision found via CV: 46.4159
+2025-05-02 01:28:50,911 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 46.4159
+2025-05-02 01:28:59,142 - [run_sgld.py:219]INFO: Final test performance: MSE=1.027, LogLik=-0.097
+2025-05-02 01:28:59,142 - [run_sgld.py:275]INFO: Method: sgld Dataset: naval-propulsion-plant
+2025-05-02 01:28:59,201 - [run_sgld.py:57]INFO: Dataset: naval-propulsion-plant
+2025-05-02 01:28:59,201 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:30:23,983 - [run_sgld.py:124]INFO: Best prior precision found via CV: 1000.0000
+2025-05-02 01:30:23,983 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 1000.0000
+2025-05-02 01:30:32,887 - [run_sgld.py:219]INFO: Final test performance: MSE=1.034, LogLik=3.456
+2025-05-02 01:30:32,887 - [run_sgld.py:275]INFO: Method: sgld Dataset: power-plant
+2025-05-02 01:30:32,902 - [run_sgld.py:57]INFO: Dataset: power-plant
+2025-05-02 01:30:32,902 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:32:29,848 - [run_sgld.py:124]INFO: Best prior precision found via CV: 10.0000
+2025-05-02 01:32:29,849 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 10.0000
+2025-05-02 01:32:39,331 - [run_sgld.py:219]INFO: Final test performance: MSE=4.386, LogLik=-5.196
+2025-05-02 01:32:39,331 - [run_sgld.py:275]INFO: Method: sgld Dataset: wine-quality-red
+2025-05-02 01:32:39,339 - [run_sgld.py:57]INFO: Dataset: wine-quality-red
+2025-05-02 01:32:39,339 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:33:58,988 - [run_sgld.py:124]INFO: Best prior precision found via CV: 46.4159
+2025-05-02 01:33:58,988 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 46.4159
+2025-05-02 01:34:07,201 - [run_sgld.py:219]INFO: Final test performance: MSE=0.654, LogLik=-1.050
+2025-05-02 01:34:07,201 - [run_sgld.py:275]INFO: Method: sgld Dataset: yacht
+2025-05-02 01:34:07,207 - [run_sgld.py:57]INFO: Dataset: yacht
+2025-05-02 01:34:07,207 - [run_sgld.py:58]INFO: Starting prior precision cross-validation for SGLD...
+2025-05-02 01:36:14,623 - [run_sgld.py:124]INFO: Best prior precision found via CV: 46.4159
+2025-05-02 01:36:14,624 - [run_sgld.py:132]INFO: Retraining SGLD on full dataset with optimal prior precision: 46.4159
+2025-05-02 01:36:28,420 - [run_sgld.py:219]INFO: Final test performance: MSE=0.871, LogLik=-4.101

@@ -1,0 +1,13 @@
+numpy
+torch==1.12.1
+torchvision
+backpack-for-pytorch
+scikit-learn
+wandb
+bayesian-torch
+blitz-bayesian-pytorch
+matplotlib
+tueplots
+dotenv
+latex
+pyro-ppl

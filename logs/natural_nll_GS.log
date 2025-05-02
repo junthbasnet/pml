@@ -1,0 +1,24 @@
+2025-05-02 16:58:08,710 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: boston-housing
+2025-05-02 16:58:14,297 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 1.0
+2025-05-02 16:58:15,100 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.063, LogLik=-2.501, LogLikBayes=-2.477
+2025-05-02 16:58:15,101 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: concrete
+2025-05-02 16:58:24,784 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 1.0
+2025-05-02 16:58:26,036 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.088, LogLik=-2.982, LogLikBayes=-2.888
+2025-05-02 16:58:26,037 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: energy
+2025-05-02 16:58:33,419 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 1.0
+2025-05-02 16:58:34,405 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.003, LogLik=-0.834, LogLikBayes=-1.234
+2025-05-02 16:58:34,406 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: kin8nm
+2025-05-02 16:59:37,080 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 10.0
+2025-05-02 16:59:45,292 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.066, LogLik=1.322, LogLikBayes=1.325
+2025-05-02 16:59:45,297 - [run_laplace_map_marglik.py:234]INFO: Method: map Dataset: naval-propulsion-plant
+2025-05-02 16:59:45,314 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 0.0001
+2025-05-02 16:59:45,354 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.272, LogLik=4.771, LogLikBayes=4.325
+2025-05-02 16:59:45,378 - [run_laplace_map_marglik.py:234]INFO: Method: map Dataset: power-plant
+2025-05-02 16:59:45,397 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 0.0001
+2025-05-02 16:59:45,423 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.031, LogLik=-2.761, LogLikBayes=-2.325
+2025-05-02 16:59:45,456 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: wine-quality-red
+2025-05-02 16:59:59,617 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 10.0
+2025-05-02 17:00:01,427 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.506, LogLik=-0.888, LogLikBayes=-0.890
+2025-05-02 17:00:01,428 - [run_laplace_map_marglik.py:237]INFO: Method: map Dataset: yacht
+2025-05-02 17:00:04,312 - [run_laplace_map_marglik.py:93]INFO: Best prior precision found: 0.01
+2025-05-02 17:00:04,976 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.000, LogLik=-0.070, LogLikBayes=-2.244

@@ -1,0 +1,16 @@
+2025-05-02 16:13:51,843 - [run_laplace_map_marglik.py:236]INFO: Method: marglik Dataset: boston-housing
+2025-05-02 16:15:21,922 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.080, LogLik=-2.353, LogLikBayes=-2.448
+2025-05-02 16:15:21,923 - [run_laplace_map_marglik.py:236]INFO: Method: marglik Dataset: concrete
+2025-05-02 16:16:34,211 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.073, LogLik=-2.835, LogLikBayes=-2.908
+2025-05-02 16:16:34,212 - [run_laplace_map_marglik.py:236]INFO: Method: marglik Dataset: energy
+2025-05-02 16:17:48,759 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.003, LogLik=-0.768, LogLikBayes=-1.290
+2025-05-02 16:17:48,760 - [run_laplace_map_marglik.py:236]INFO: Method: marglik Dataset: kin8nm
+2025-05-02 16:19:15,742 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.066, LogLik=1.266, LogLikBayes=1.308
+2025-05-02 16:19:15,743 - [run_laplace_map_marglik.py:236]INFO: Method: marglik Dataset: naval-propulsion-plant
+2025-05-02 16:19:15,742 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.231, LogLik=4.834, LogLikBayes=4.834
+2025-05-02 16:34:04,695 - [run_laplace_map_marglik.py:234]INFO: Method: marglik Dataset: power-plant
+2025-05-02 16:35:21,081 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.048, LogLik=-2.711, LogLikBayes=-2.713
+2025-05-02 16:38:44,299 - [run_laplace_map_marglik.py:234]INFO: Method: marglik Dataset: wine-quality-red
+2025-05-02 16:40:09,858 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.446, LogLik=-0.827, LogLikBayes=-0.868
+2025-05-02 16:42:10,577 - [run_laplace_map_marglik.py:234]INFO: Method: marglik Dataset: yacht
+2025-05-02 16:43:17,093 - [run_laplace_map_marglik.py:167]INFO: Final test performance: MSE=0.001, LogLik=-0.309, LogLikBayes=-1.331
