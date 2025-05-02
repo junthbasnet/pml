@@ -173,6 +173,14 @@ if __name__ == '__main__':
     import sys
     import argparse
     from arg_utils import set_defaults_with_yaml_config
+    UCI_DATASETS = [
+        'boston-housing',
+        'concrete',
+        'energy',
+        'kin8nm',
+        'wine-quality-red',
+        'yacht',
+    ]
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', default=7, type=int)
     parser.add_argument('--dataset', default='power-plant', choices=UCI_DATASETS)
