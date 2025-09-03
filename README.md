@@ -4,7 +4,7 @@
 [Seed paper](https://openreview.net/pdf?id=A6EquH0enk)
 
 ## Setup
-For experiments, we used python version 3.9 and torch version 1.12.1
+For experiments, we used python version 3.9 and torch version 1.12.1.
 
 Additional online dependencies are listed in `requirements.txt` and have to be installed with `pip install -r requirements.txt`.
 
